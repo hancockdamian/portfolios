@@ -1,6 +1,5 @@
 {
   "name": "next.js dev",
-  "image": "mcr.microsoft.com/vscode/devcontainers/javascript-node:24",
   "features": {
     "ghcr.io/devcontainers/features/node:1": {
       "version": "24"
