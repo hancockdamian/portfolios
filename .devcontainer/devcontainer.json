@@ -1,5 +1,9 @@
 {
   "name": "next.js dev",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "options": ["--platform=linux/amd64"]
+  },
   "features": {
     "ghcr.io/devcontainers/features/node:1": {
       "version": "24"
@@ -16,6 +20,6 @@
       ]
     }
   },
-  "build": { "dockerfile": "Dockerfile" },
-  "postCreateCommand": "npm install"
+  "postCreateCommand": "npm install",
+  "remoteUser": "node"
 }
