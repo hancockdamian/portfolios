@@ -1,0 +1,25 @@
+{
+  "name": "next.js dev",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "options": ["--platform=linux/amd64"]
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "24"
+    }
+  },
+  "forwardPorts": [3000],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-azuretools.vscode-docker",
+        "foxundermoon.shell-format"
+      ]
+    }
+  },
+  "postCreateCommand": "npm install",
+  "remoteUser": "node"
+}
