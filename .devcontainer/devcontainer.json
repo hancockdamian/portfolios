@@ -16,5 +16,6 @@
       ]
     }
   },
-  "build": { "dockerfile": "Dockerfile" }
+  "build": { "dockerfile": "Dockerfile" },
+  "postCreateCommand": "npm install"
 }
