@@ -24,3 +24,41 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Animated background: soft radial blobs + slow drift */
+.bg-animated {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(60vmax 60vmax at 20% 10%, #bf6587 0%, transparent 60%),
+              radial-gradient(50vmax 50vmax at 70% 0%, #d6be71 0%, transparent 55%),
+              radial-gradient(60vmax 60vmax at 40% 80%, #d6be71 0%, transparent 60%),
+              radial-gradient(70vmax 70vmax at 90% 80%, #bf6587 0%, transparent 60%);
+  filter: blur(18px) saturate(105%);
+  animation: drift 40s ease-in-out infinite alternate;
+}
+
+@keyframes drift {
+  0%   { transform: translate3d(0,0,0) scale(1); }
+  50%  { transform: translate3d(-2%, 1%, 0) scale(1.02); }
+  100% { transform: translate3d(2%, -1%, 0) scale(1.03); }
+}
+
+/* Film grain overlay */
+.grain {
+  background-image: url("/noise.png");
+  background-size: 300px 300px;
+  animation: grainShift 6s steps(6) infinite;
+  opacity: 0.35;
+}
+@keyframes grainShift {
+  0%, 100% { transform: translate(0,0); }
+  10% { transform: translate(-1%, -1%); }
+  20% { transform: translate(1%, -2%); }
+  30% { transform: translate(2%, 1%); }
+  40% { transform: translate(-2%, 2%); }
+  50% { transform: translate(1%, -1%); }
+  60% { transform: translate(-1%, 1%); }
+  70% { transform: translate(2%, -2%); }
+  80% { transform: translate(-2%, 1%); }
+  90% { transform: translate(1%, 2%); }
+}
