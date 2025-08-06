@@ -16,7 +16,7 @@
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
         "ms-azuretools.vscode-docker",
-        "foxundermoon.shell-format"
+        "bradlc.vscode-tailwindcss"
       ]
     }
   },
