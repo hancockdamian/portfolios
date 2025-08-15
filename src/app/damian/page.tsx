@@ -5,14 +5,13 @@ import PixelTrail from "@/components/PixelTrail";
 export default function Page() {
   return (
     <main className="relative w-screen h-screen overflow-hidden bg-gray-300">
-      {/* Fullscreen PixelTrail */}
       <PixelTrail
-        gridSize={50}
-        trailSize={0.05}
-        maxAge={150}
-        interpolate={3}
-        color="rgb(236, 15, 177)"
-        gooeyFilter={{ id: "custom-goo-filter", strength: 0.5 }}
+        gridSize={70}
+        trailSize={0.12}
+        maxAge={1000}
+        interpolate={0.8}
+        color="#bb307f"
+        gooeyFilter={{ id: "custom-goo-filter", strength: 1 }}
       />
 
       <div className="absolute inset-0 flex items-center justify-center">
