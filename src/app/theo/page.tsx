@@ -3,13 +3,24 @@ import Link from "next/link";
 import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
 import TerminalRoundedIcon from "@mui/icons-material/TerminalRounded";
 import BusinessCenterRoundedIcon from "@mui/icons-material/BusinessCenterRounded";
-import DecryptedText from "@/components/DecryptedText";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import EmailIcon from "@mui/icons-material/Email";
+import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
+import CakeRoundedIcon from "@mui/icons-material/CakeRounded";
+import WcRoundedIcon from "@mui/icons-material/WcRounded";
+import LocationOnRoundedIcon from "@mui/icons-material/LocationOnRounded";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import DirectionsCarRoundedIcon from "@mui/icons-material/DirectionsCarRounded";
+import InstagramIcon from "@mui/icons-material/Instagram";
 import TextType from "@/components/TextType";
 import MetaBalls from "@/components/MetaBalls";
+import ManIcon from "@mui/icons-material/Man";
+import CountUp from "@/components/CountUp";
 import Image from "next/image";
 
 export const metadata: Metadata = {
-  title: "Theo — Home",
+  title: "Theo's Portfolio",
   description: "Theo's portfolio home",
 };
 
@@ -25,7 +36,7 @@ const staticCard =
   "transition-[background-color,box-shadow,backdrop-filter,border-color] duration-200 ease-out " +
   "focus-visible:ring-2 focus-visible:ring-white/40 ring-inset outline-none";
 
-const decryptSpeed = 60;
+const sideIconsSize = 30;
 
 export default function TheoHome() {
   return (
@@ -48,8 +59,99 @@ export default function TheoHome() {
                   priority
                 />
               </div>
+              <div
+                className={`${staticCard} flex-1 p-6 grid grid-rows-[1fr_1fr]`}
+              >
+                {/* Top half: facts (icons tight to values) */}
+                <dl className="grid h-full grid-cols-[auto_1fr] grid-rows-[repeat(5,1fr)] items-center gap-x-1">
+                  {/* Name */}
+                  <dt className="flex items-center text-white/70">
+                    <PersonRoundedIcon sx={{ fontSize: sideIconsSize }} />
+                    <span className="sr-only">Name</span>
+                  </dt>
+                  <dd className="text-lg  font-medium text-white/90 justify-self-start pl-1">
+                    Theo
+                  </dd>
 
-              <div className={`${staticCard} flex-1 p-6`}></div>
+                  {/* Age */}
+                  {/* <dt className="flex items-center h-6 text-white/70">
+                    <CakeRoundedIcon
+                      sx={{ fontSize: sideIconsSize, verticalAlign: "middle" }}
+                    />
+                    <span className="sr-only">Age</span>
+                  </dt>
+                  <dd className="flex items-center h-6 text-lg font-medium text-white/90 pl-1 leading-none">
+                    <span className="inline-flex items-center leading-none">
+                      <CountUp
+                        from={0}
+                        to={26}
+                        separator=","
+                        direction="up"
+                        duration={1}
+                        className="count-up-text"
+                      />
+                    </span>
+                  </dd> */}
+
+                  {/* Gender */}
+                  <dt className="flex items-center text-white/70">
+                    <ManIcon sx={{ fontSize: sideIconsSize }} />
+                    <span className="sr-only">Gender</span>
+                  </dt>
+                  <dd className="text-lg  font-medium text-white/90 justify-self-start pl-1">
+                    Male
+                  </dd>
+
+                  {/* Location */}
+                  <dt className="flex items-center text-white/70">
+                    <LocationOnRoundedIcon sx={{ fontSize: sideIconsSize }} />
+                    <span className="sr-only">Location</span>
+                  </dt>
+                  <dd className="text-lg font-medium text-white/90 justify-self-start pl-1">
+                    Perth
+                  </dd>
+
+                  {/* Car */}
+                  <dt className="flex items-center text-white/70">
+                    <DirectionsCarRoundedIcon
+                      sx={{ fontSize: sideIconsSize }}
+                    />
+                    <span className="sr-only">Car</span>
+                  </dt>
+                  <dd className="text-lg font-medium text-white/90 justify-self-start pl-1">
+                    Manual
+                  </dd>
+                </dl>
+
+                {/* Bottom half: socials (stick to bottom of the half) */}
+                <div className="flex h-full items-end justify-center gap-5 pb-2">
+                  <Link
+                    href="https://www.linkedin.com/in/theo-hancock-989b72233/"
+                    aria-label="LinkedIn"
+                    target="_blank"
+                    className="text-white/75 hover:text-white transition"
+                  >
+                    <LinkedInIcon sx={{ fontSize: 24 }} />
+                  </Link>
+                  <Link
+                    href="https://github.com/TheoSE98"
+                    aria-label="GitHub"
+                    target="_blank"
+                    className="text-white/75 hover:text-white transition"
+                  >
+                    <GitHubIcon sx={{ fontSize: 24 }} />
+                  </Link>
+                  <Link
+                    href="https://instagram.com/your-handle"
+                    aria-label="Instagram"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white/75 hover:text-white transition"
+                  >
+                    <InstagramIcon sx={{ fontSize: 24 }} />
+                  </Link>
+                </div>
+              </div>
             </div>
 
             {/* Right side: two equal tiles */}
@@ -121,7 +223,6 @@ export default function TheoHome() {
           </div>
         </div>
 
-        {/* RIGHT: 320px column with 3 cards */}
         <div className="grid h-full grid-rows-[repeat(3,1fr)] gap-4">
           {/* Card 1 — Education */}
           <Link

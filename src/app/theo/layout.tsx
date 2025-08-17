@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import Threads from "@/components/threads";
 
+
 export default function TheoGroupLayout({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen flex flex-col relative">
@@ -23,7 +24,10 @@ export default function TheoGroupLayout({ children }: { children: ReactNode }) {
               </Link>
             </nav>
           </div>
-          <div className="h-14 w-full rounded-xl border border-white/15 bg-white/10 backdrop-blur-md shadow-md" />
+
+          <div className="h-14 w-full rounded-xl border border-white/15 bg-white/10 backdrop-blur-md shadow-md flex items-center px-2">
+          </div>
+          
         </div>
       </header>
 
