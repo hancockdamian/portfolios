@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
+import TerminalRoundedIcon from "@mui/icons-material/TerminalRounded";
+import BusinessCenterRoundedIcon from "@mui/icons-material/BusinessCenterRounded";
 import DecryptedText from "@/components/DecryptedText";
+import TextType from "@/components/TextType";
 import MetaBalls from "@/components/MetaBalls";
 import Image from "next/image";
 
@@ -35,7 +40,7 @@ export default function TheoHome() {
             <div className="flex h-full flex-col gap-6">
               <div className="w-30 aspect-square mx-auto rounded-full border border-white/15 bg-white/10 backdrop-blur-md shadow-md relative overflow-hidden">
                 <Image
-                  src="/IMG_4266.jpg"
+                  src="/ProfilePic.png"
                   alt="Theo portrait"
                   fill
                   className="object-cover"
@@ -51,16 +56,29 @@ export default function TheoHome() {
             <div className="grid h-full grid-rows-[1fr_1fr] gap-6">
               {/* Top tile: bio */}
               <div className={`${staticCard} p-6 flex flex-col`}>
-                <div className="text-center">
-                  <DecryptedText
-                    text="Welcome to my portfolio"
-                    animateOn="view"
-                    revealDirection="start"
-                    speed={decryptSpeed}
-                    sequential
-                    maxIterations={5}
-                    className="text-4xl font-semibold text-white/90"
-                  />
+                <div className="w-full text-center">
+                  {/* reserve height with an invisible copy of the longest line */}
+                  <div className="relative w-full">
+                    <span className="invisible block text-3xl font-semibold">
+                      Text typing effect
+                    </span>
+
+                    {/* typed text sits on top, never wraps */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <TextType
+                        text={[
+                          "Welcome to my Portfolio",
+                          "Full-stack dev in Perth",
+                          "Happy Exploring!",
+                        ]}
+                        typingSpeed={75}
+                        pauseDuration={10000}
+                        showCursor={false}
+                        className="text-3xl font-semibold text-white/90 whitespace-nowrap"
+                        cursorCharacter="|"
+                      />
+                    </div>
+                  </div>
                 </div>
 
                 <div className="mt-6 space-y-3 text-base leading-relaxed text-white/80">
@@ -105,9 +123,61 @@ export default function TheoHome() {
 
         {/* RIGHT: 320px column with 3 cards */}
         <div className="grid h-full grid-rows-[repeat(3,1fr)] gap-4">
-          <div className={card} tabIndex={0} />
-          <div className={card} tabIndex={0} />
-          <div className={card} tabIndex={0} />
+          {/* Card 1 — Education */}
+          <Link
+            href="/theo/education"
+            aria-label="Education"
+            className={`${card} p-5 grid grid-rows-[auto_auto_1fr] justify-items-center gap-2 hover:no-underline`}
+          >
+            <SchoolRoundedIcon
+              sx={{ fontSize: 100 }}
+              className="text-white/90 mt-1"
+            />
+            <h3 className="text-lg font-medium tracking-wide text-white/90">
+              Education
+            </h3>
+            <p className="text-sm text-white/70 text-center leading-snug">
+              Curtin University — coursework, projects, and achievements.
+            </p>
+          </Link>
+
+          {/* Card 2 — Work */}
+          <Link
+            href="/theo/work"
+            aria-label="Work"
+            className={`${card} p-5 grid grid-rows-[auto_auto_1fr] justify-items-center gap-2 hover:no-underline`}
+          >
+            <BusinessCenterRoundedIcon
+              sx={{ fontSize: 100 }}
+              className="text-white/90 mt-1"
+            />
+            <h3 className="text-lg font-medium tracking-wide text-white/90">
+              Work
+            </h3>
+            <p className="text-sm text-white/70 text-center leading-snug">
+              Pharmacy Halo — full-stack dev in C#, .NET & XAML; production apps
+              and internal tooling.
+            </p>
+          </Link>
+
+          {/* Card 3 — Projects */}
+          <Link
+            href="/theo/projects"
+            aria-label="Projects"
+            className={`${card} p-5 grid grid-rows-[auto_auto_1fr] justify-items-center gap-2 hover:no-underline`}
+          >
+            <TerminalRoundedIcon
+              sx={{ fontSize: 100 }}
+              className="text-white/90 mt-1"
+            />
+            <h3 className="text-lg font-medium tracking-wide text-white/90">
+              Projects
+            </h3>
+            <p className="text-sm text-white/70 text-center leading-snug">
+              A collection of current projects — from university work to
+              personal builds.
+            </p>
+          </Link>
         </div>
       </div>
     </section>
