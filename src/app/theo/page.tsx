@@ -1,3 +1,4 @@
+"use client";
 import type { Metadata } from "next";
 import Link from "next/link";
 import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
@@ -19,10 +20,6 @@ import ManIcon from "@mui/icons-material/Man";
 import CountUp from "@/components/CountUp";
 import Image from "next/image";
 
-export const metadata: Metadata = {
-  title: "Theo's Portfolio",
-  description: "Theo's portfolio home",
-};
 
 const card =
   "rounded-xl border border-white/15 bg-white/10 backdrop-blur-md shadow-md " +
