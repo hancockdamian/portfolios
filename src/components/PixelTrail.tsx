@@ -174,9 +174,22 @@ export default function PixelTrail({
       )}
       <Canvas
         {...canvasProps}
-        gl={glProps}
         className={`absolute z-1 ${className}`}
-        style={gooeyFilter ? { filter: `url(#${gooeyFilter.id})` } : undefined}
+        gl={{
+          antialias: false,
+          alpha: true,
+          powerPreference: "high-performance",
+          preserveDrawingBuffer: true,
+          premultipliedAlpha: false,
+          failIfMajorPerformanceCaveat: false,
+        }}
+        onCreated={({ gl }) => {
+          gl.outputColorSpace = THREE.SRGBColorSpace;
+          gl.toneMapping = THREE.NoToneMapping;
+          gl.toneMappingExposure = 1;
+          gl.setPixelRatio(window.devicePixelRatio);
+          gl.setSize(window.innerWidth, window.innerHeight);
+        }}
       >
         <Scene
           gridSize={gridSize}
