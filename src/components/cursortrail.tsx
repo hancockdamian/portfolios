@@ -2,6 +2,15 @@
 
 import React, { useRef, useEffect } from "react";
 
+interface CursorTrailProps {
+  pixelSize?: number;
+  baseRadius?: number;
+  maxExtraRadius?: number;
+  velocityMultiplier?: number;
+  lifetime?: number;
+  color?: string;
+}
+
 interface Point {
   x: number;
   y: number;
@@ -9,7 +18,14 @@ interface Point {
   velocity: number;
 }
 
-export default function CursorTrail() {
+export default function CursorTrail({
+  pixelSize = 5,
+  baseRadius = 2.5,
+  maxExtraRadius = 15,
+  velocityMultiplier = 20,
+  lifetime = 150,
+  color = "255, 0, 127",
+}: CursorTrailProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const pointsRef = useRef<Point[]>([]);
 
@@ -41,7 +57,7 @@ export default function CursorTrail() {
         const dy = e.clientY - lastY;
         const dt = now - lastTime;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        velocity = dt > 0 ? dist / dt : 0; // px per ms
+        velocity = dt > 0 ? dist / dt : 0;
       }
 
       pointsRef.current.push({
@@ -61,23 +77,6 @@ export default function CursorTrail() {
 
     let animationId: number;
 
-    const pixelSize = 5;
-    const step = pixelSize;
-
-    const unitOffsets: { x: number; y: number; distSq: number }[] = [];
-    const maxBaseRadius = 1;
-
-    for (let y = -1; y <= 1; y += step / 40) {
-      for (let x = -1; x <= 1; x += step / 40) {
-        const dSq = x * x + y * y;
-        if (dSq <= maxBaseRadius) {
-          unitOffsets.push({ x, y, distSq: dSq });
-        }
-      }
-    }
-
-    const lifetime = 250;
-
     const draw = () => {
       const now = performance.now();
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -90,9 +89,10 @@ export default function CursorTrail() {
         const age = now - p.time;
         const lifeAlpha = 1 - age / lifetime;
 
-        const baseRadius = 5;
-        const maxExtra = 25;
-        const velocityScale = Math.min(p.velocity * 50, maxExtra);
+        const velocityScale = Math.min(
+          p.velocity * velocityMultiplier,
+          maxExtraRadius
+        );
         const radius = baseRadius + velocityScale;
 
         for (let y = -radius; y <= radius; y += pixelSize) {
@@ -103,7 +103,7 @@ export default function CursorTrail() {
               const alpha = lifeAlpha * radialAlpha;
               if (alpha <= 0) continue;
 
-              ctx.fillStyle = `rgba(255, 0, 127, ${alpha})`;
+              ctx.fillStyle = `rgba(${color}, ${alpha})`;
               ctx.fillRect(p.x + x, p.y + y, pixelSize, pixelSize);
             }
           }
@@ -120,14 +120,19 @@ export default function CursorTrail() {
       cancelAnimationFrame(animationId);
       window.removeEventListener("resize", resize);
     };
-  }, []);
+  }, [
+    pixelSize,
+    baseRadius,
+    maxExtraRadius,
+    velocityMultiplier,
+    lifetime,
+    color,
+  ]);
 
   return (
-    <div>
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 w-full h-full pointer-events-none"
-      />
-    </div>
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full pointer-events-none"
+    />
   );
 }
