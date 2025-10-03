@@ -39,6 +39,20 @@ export default function CursorTrail() {
 
     let animationId: number;
 
+    const pixelSize = 5;
+    const radius = 25;
+    const step = pixelSize; // step matches pixel size for even spacing
+
+    const pixelOffsets: { x: number; y: number }[] = [];
+
+    for (let y = -radius; y <= radius; y += step) {
+      for (let x = -radius; x <= radius; x += step) {
+        if (x * x + y * y <= radius * radius) {
+          pixelOffsets.push({ x, y });
+        }
+      }
+    }
+
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -47,10 +61,19 @@ export default function CursorTrail() {
 
       for (let i = 0; i < total; i++) {
         const p = points[i];
-        const alpha = i / total;
+        const trailAlpha = i / total;
 
-        ctx.fillStyle = `rgba(255, 0, 127, ${alpha})`;
-        ctx.fillRect(p.x - 25, p.y - 25, 50, 50);
+        for (const offset of pixelOffsets) {
+          const distSq = offset.x * offset.x + offset.y * offset.y;
+          const maxDistSq = radius * radius;
+          const radialAlpha = 0.8 - distSq / maxDistSq;
+
+          const alpha = trailAlpha * radialAlpha;
+          if (alpha <= 0) continue;
+
+          ctx.fillStyle = `rgba(255, 0, 127, ${alpha})`;
+          ctx.fillRect(p.x + offset.x, p.y + offset.y, pixelSize, pixelSize);
+        }
       }
 
       animationId = requestAnimationFrame(draw);
@@ -61,6 +84,7 @@ export default function CursorTrail() {
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       cancelAnimationFrame(animationId);
+      window.removeEventListener("resize", resize);
     };
   }, []);
 
