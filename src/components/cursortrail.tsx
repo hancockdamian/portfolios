@@ -88,7 +88,8 @@ export default function CursorTrail({
         (p) => now - p.time < lifetime
       );
 
-      for (const p of pointsRef.current) {
+      for (let i = 0; i < pointsRef.current.length; i++) {
+        const p = pointsRef.current[i];
         const age = now - p.time;
         const lifeAlpha = 1 - age / lifetime;
 
@@ -98,21 +99,35 @@ export default function CursorTrail({
         );
         const radius = (baseRadius + velocityScale) / pixelSize;
 
-        const gradient = bctx.createRadialGradient(
-          p.x,
-          p.y,
-          0,
-          p.x,
-          p.y,
-          radius
-        );
-        gradient.addColorStop(0, `rgba(${color}, ${lifeAlpha})`);
-        gradient.addColorStop(1, `rgba(${color}, 0)`);
+        const drawBlob = (x: number, y: number, alpha: number) => {
+          const gradient = bctx.createRadialGradient(x, y, 0, x, y, radius);
+          gradient.addColorStop(0, `rgba(${color}, ${alpha})`);
+          gradient.addColorStop(1, `rgba(${color}, 0)`);
 
-        bctx.fillStyle = gradient;
-        bctx.beginPath();
-        bctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
-        bctx.fill();
+          bctx.fillStyle = gradient;
+          bctx.beginPath();
+          bctx.arc(x, y, radius, 0, Math.PI * 2);
+          bctx.fill();
+        };
+
+        drawBlob(p.x, p.y, lifeAlpha);
+
+        if (i > 0) {
+          const prev = pointsRef.current[i - 1];
+          const dx = p.x - prev.x;
+          const dy = p.y - prev.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist > 0) {
+            const steps = Math.floor(dist / (radius * 0.5));
+            for (let s = 1; s < steps; s++) {
+              const t = s / steps;
+              const ix = prev.x + dx * t;
+              const iy = prev.y + dy * t;
+              drawBlob(ix, iy, lifeAlpha);
+            }
+          }
+        }
       }
 
       ctx.imageSmoothingEnabled = false;
