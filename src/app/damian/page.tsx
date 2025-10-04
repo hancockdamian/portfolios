@@ -8,8 +8,8 @@ export default function Page() {
       <CursorTrail
         pixelSize={6}
         baseRadius={3}
-        maxExtraRadius={30}
-        velocityMultiplier={40}
+        maxExtraRadius={25}
+        velocityMultiplier={25}
         lifetime={150}
         color="255, 0, 127"
       />

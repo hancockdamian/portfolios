@@ -19,7 +19,7 @@ interface Point {
 }
 
 export default function CursorTrail({
-  pixelSize = 5,
+  pixelSize = 6,
   baseRadius = 2.5,
   maxExtraRadius = 15,
   velocityMultiplier = 20,
@@ -28,17 +28,19 @@ export default function CursorTrail({
 }: CursorTrailProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const pointsRef = useRef<Point[]>([]);
+  const bufferCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    const canvas = canvasRef.current!;
+    const ctx = canvas.getContext("2d")!;
+    const buffer = bufferCanvasRef.current!;
+    const bctx = buffer.getContext("2d")!;
 
     const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      buffer.width = Math.ceil(canvas.width / pixelSize);
+      buffer.height = Math.ceil(canvas.height / pixelSize);
     };
     resize();
     window.addEventListener("resize", resize);
@@ -61,8 +63,8 @@ export default function CursorTrail({
       }
 
       pointsRef.current.push({
-        x: e.clientX,
-        y: e.clientY,
+        x: e.clientX / pixelSize,
+        y: e.clientY / pixelSize,
         time: now,
         velocity,
       });
@@ -76,10 +78,11 @@ export default function CursorTrail({
     window.addEventListener("mousemove", handleMouseMove);
 
     let animationId: number;
+    bctx.globalCompositeOperation = "source-over";
 
     const draw = () => {
       const now = performance.now();
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      bctx.clearRect(0, 0, buffer.width, buffer.height);
 
       pointsRef.current = pointsRef.current.filter(
         (p) => now - p.time < lifetime
@@ -93,22 +96,38 @@ export default function CursorTrail({
           p.velocity * velocityMultiplier,
           maxExtraRadius
         );
-        const radius = baseRadius + velocityScale;
+        const radius = (baseRadius + velocityScale) / pixelSize;
 
-        for (let y = -radius; y <= radius; y += pixelSize) {
-          for (let x = -radius; x <= radius; x += pixelSize) {
-            const distSq = x * x + y * y;
-            if (distSq <= radius * radius) {
-              const radialAlpha = 1 - distSq / (radius * radius);
-              const alpha = lifeAlpha * radialAlpha;
-              if (alpha <= 0) continue;
+        const gradient = bctx.createRadialGradient(
+          p.x,
+          p.y,
+          0,
+          p.x,
+          p.y,
+          radius
+        );
+        gradient.addColorStop(0, `rgba(${color}, ${lifeAlpha})`);
+        gradient.addColorStop(1, `rgba(${color}, 0)`);
 
-              ctx.fillStyle = `rgba(${color}, ${alpha})`;
-              ctx.fillRect(p.x + x, p.y + y, pixelSize, pixelSize);
-            }
-          }
-        }
+        bctx.fillStyle = gradient;
+        bctx.beginPath();
+        bctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
+        bctx.fill();
       }
+
+      ctx.imageSmoothingEnabled = false;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(
+        buffer,
+        0,
+        0,
+        buffer.width,
+        buffer.height,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
 
       animationId = requestAnimationFrame(draw);
     };
@@ -130,9 +149,12 @@ export default function CursorTrail({
   ]);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none"
-    />
+    <>
+      <canvas ref={bufferCanvasRef} style={{ display: "none" }} />
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full pointer-events-none"
+      />
+    </>
   );
 }
