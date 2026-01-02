@@ -64,7 +64,7 @@ export default function ModelViewer({ src, width = 600, height = 600 }: ModelVie
 
       <button
         onClick={() => setRotating((r) => !r)}
-        className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition"
+        className="px-2 py-1 bg-black text-white rounded-md hover:bg-gray-800 transition"
       >
         {rotating ? "Stop Rotation" : "Start Rotation"}
       </button>
