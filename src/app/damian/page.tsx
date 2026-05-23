@@ -3,10 +3,12 @@
 import CursorTrail from "@/components/cursortrail";
 import ModelViewer from "@/components/ModelViewer";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 export default function Page() {
-  const [progress, setProgress] = useState(41); // Start at ~1:14
+  const [progress, setProgress] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
   const totalSeconds = 178; // 2 minutes and 58 seconds
 
   const formatTime = (secs: number) => {
@@ -15,8 +17,54 @@ export default function Page() {
     return `${m}:${s < 10 ? "0" : ""}${s}`;
   };
 
+  const togglePlay = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const handleTimeUpdate = () => {
+    if (audioRef.current && audioRef.current.duration) {
+      setProgress(
+        (audioRef.current.currentTime / audioRef.current.duration) * 100
+      );
+    }
+  };
+
+  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newProgress = Number(e.target.value);
+    setProgress(newProgress);
+    if (audioRef.current && audioRef.current.duration) {
+      audioRef.current.currentTime =
+        (newProgress / 100) * audioRef.current.duration;
+    }
+  };
+
   return (
-    <main className="relative w-full min-h-screen overflow-x-hidden bg-white bg-[radial-gradient(#d1d5db_1.5px,transparent_1.5px)] bg-[size:24px_24px] flex flex-col">
+    <main className="relative w-full min-h-screen overflow-x-hidden flex flex-col">
+      {/* Background Dot Grid Animation */}
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            @keyframes grid-breathe {
+              0% { transform: scale(1) translate(0, 0); }
+              33% { transform: scale(1.05) translate(1%, 1.5%); }
+              66% { transform: scale(0.95) translate(-1%, -1%); }
+              100% { transform: scale(1) translate(0, 0); }
+            }
+            .animate-grid-breathe {
+              animation: grid-breathe 25s ease-in-out infinite;
+            }
+          `,
+        }}
+      />
+      <div className="fixed -inset-[50%] w-[200%] h-[200%] -z-50 pointer-events-none bg-white bg-[radial-gradient(#d1d5db_1.5px,transparent_1.5px)] bg-[size:24px_24px] animate-grid-breathe" />
+
       <CursorTrail
         pixelSize={6}
         baseRadius={3}
@@ -129,19 +177,39 @@ export default function Page() {
             </div>
 
             {/* Record Image */}
-            <Image
-              src="/record.svg"
-              alt="Record"
-              width={320}
-              height={320}
-              className="object-contain drop-shadow-xl"
-            />
+            <a
+              href="https://feeblelittlehorse.bandcamp.com/album/girl-with-fish"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:scale-[1.02] transition-transform duration-300 cursor-pointer"
+            >
+              <Image
+                src="/record.svg"
+                alt="Record"
+                width={320}
+                height={320}
+                className="object-contain drop-shadow-xl"
+              />
+            </a>
 
-            <h3 className="text-gray-500 text-l font-medium"></h3>
+            {/* Song Title */}
+            <div className="flex flex-col items-center text-center z-10 -mb-2">
+              <h4 className="text-gray-600 text-xl font-medium tracking-tight">
+                pocket
+              </h4>
+            </div>
 
             {/* Subtle liquid color glow behind the standalone glass elements */}
             <div className="absolute bottom-10 left-10 w-32 h-32 bg-pink-300/30 rounded-full mix-blend-multiply filter blur-2xl animate-pulse -z-10"></div>
             <div className="absolute bottom-0 right-10 w-32 h-32 bg-blue-300/30 rounded-full mix-blend-multiply filter blur-2xl animate-pulse delay-700 -z-10"></div>
+
+            {/* Hidden Audio Element */}
+            <audio
+              ref={audioRef}
+              src="/pocket.mp3"
+              onTimeUpdate={handleTimeUpdate}
+              onEnded={() => setIsPlaying(false)}
+            />
 
             {/* Standalone Glass Progress Bar */}
             <div className="w-full flex flex-col gap-2 mt-2 z-10 px-4">
@@ -158,7 +226,7 @@ export default function Page() {
                   max="100"
                   step="0.1"
                   value={progress}
-                  onChange={(e) => setProgress(Number(e.target.value))}
+                  onChange={handleSeek}
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 />
               </div>
@@ -181,13 +249,22 @@ export default function Page() {
                   <path d="M7 6c.55 0 1 .45 1 1v10c0 .55-.45 1-1 1s-1-.45-1-1V7c0-.55.45-1 1-1zm3.66 6.82l5.77 4.07c.66.47 1.58-.01 1.58-.82V7.93c0-.81-.91-1.28-1.58-.82l-5.77 4.07c-.57.4-.57 1.24 0 1.64z" />
                 </svg>
               </button>
-              <button className="flex items-center justify-center hover:scale-110 transition-transform cursor-pointer group drop-shadow-2xl">
+              <button
+                onClick={togglePlay}
+                className="flex items-center justify-center hover:scale-110 transition-transform cursor-pointer group drop-shadow-2xl z-20"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
-                  className="w-12 h-12 fill-gray-300/70 group-hover:fill-gray-400/90 transition-colors ml-1"
+                  className={`w-12 h-12 fill-gray-300/70 group-hover:fill-gray-400/90 transition-colors ${
+                    isPlaying ? "" : "ml-1"
+                  }`}
                 >
-                  <path d="M8 6.82v10.36c0 .79.87 1.27 1.54.84l8.14-5.18c.62-.39.62-1.29 0-1.69L9.54 5.98C8.87 5.55 8 6.03 8 6.82z" />
+                  {isPlaying ? (
+                    <path d="M8 19c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2s-2 .9-2 2v10c0 1.1.9 2 2 2zm6-12v10c0 1.1.9 2 2 2s2-.9 2-2V7c0-1.1-.9-2-2-2s-2 .9-2 2z" />
+                  ) : (
+                    <path d="M8 6.82v10.36c0 .79.87 1.27 1.54.84l8.14-5.18c.62-.39.62-1.29 0-1.69L9.54 5.98C8.87 5.55 8 6.03 8 6.82z" />
+                  )}
                 </svg>
               </button>
               <button className="flex items-center justify-center hover:scale-110 transition-transform cursor-pointer group drop-shadow-xl">
@@ -266,8 +343,8 @@ export default function Page() {
             <div className="w-full flex justify-center items-center relative cursor-grab active:cursor-grabbing">
               <ModelViewer
                 src="/models/Room.glb"
-                width={450}
-                height={450}
+                width={400}
+                height={400}
                 rotation={[0, Math.PI + 0.8, 0]}
               />
             </div>
