@@ -62,7 +62,7 @@ export default function Page() {
         </div>
 
         {/* Horizontal Scrollable Placeholder Section */}
-        <div className="w-full max-w-5xl px-8 mt-24 overflow-hidden">
+        <div className="w-full max-w-5xl px-8 mt-12 overflow-hidden">
           <style
             dangerouslySetInnerHTML={{
               __html: `
@@ -116,14 +116,16 @@ export default function Page() {
       </section>
 
       {/* --- Section 2: Future Content --- */}
-      <section className="w-full flex flex-col items-center justify-center pt-4 pb-24">
+      <section className="w-full flex flex-col items-center justify-center pt-4 pb-16">
         <div className="flex flex-col md:flex-row items-center justify-center gap-16 max-w-5xl w-full px-8 z-10">
           {/* Left Column: Record & Liquid Glass Player */}
           <div className="flex-1 flex flex-col items-center w-full max-w-md gap-6 relative">
             {/* Title Section */}
             <div className="flex flex-col items-center text-center gap-1">
               <p className="text-gray-500 text-m">favourite album</p>
-              <h3 className="text-gray-600 text-xl font-medium">feeble little horse - girl with fish</h3>
+              <h3 className="text-gray-600 text-xl font-medium">
+                feeble little horse - girl with fish
+              </h3>
             </div>
 
             {/* Record Image */}
@@ -229,6 +231,46 @@ export default function Page() {
               you under and spitting you out dizzy, grinning, soaked in feedback
               and feeling.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* --- Section 3: Room Tour --- */}
+      <section className="w-full flex flex-col items-center justify-center pt-8 pb-24">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-16 max-w-5xl w-full px-8 z-10">
+          {/* Left Column: Text */}
+          <div className="relative z-10 flex-1 flex flex-col gap-6 text-lg text-gray-800 leading-relaxed font-medium">
+            {/* Plant Background */}
+            <div className="absolute -z-10 -inset-x-8 -inset-y-8 md:-inset-12 pointer-events-none opacity-50">
+              <Image
+                src="/plant.svg"
+                alt="Plant Background"
+                fill
+                className="object-contain"
+              />
+            </div>
+
+            <p>
+              tiny room update: i adopted a new little plant friend to keep the
+              space lively. my monstera, sadly, didn’t make it through the
+              chaos… but don’t count her out just yet — she’s in the middle of a
+              dramatic resurrection arc. fingers crossed for a comeback.
+            </p>
+          </div>
+
+          {/* Right Column: 3D Model */}
+          <div className="flex-1 flex flex-col items-center justify-center w-full max-w-md gap-2 relative">
+            <div className="flex flex-col items-center text-center">
+              <p className="text-gray-500 text-m">room tour</p>
+            </div>
+            <div className="w-full flex justify-center items-center relative cursor-grab active:cursor-grabbing">
+              <ModelViewer
+                src="/models/Room.glb"
+                width={450}
+                height={450}
+                rotation={[0, Math.PI + 0.8, 0]}
+              />
+            </div>
           </div>
         </div>
       </section>

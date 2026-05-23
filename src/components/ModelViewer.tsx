@@ -2,16 +2,41 @@
 
 import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { useRef, useEffect, useState } from "react";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { useRef, useEffect } from "react";
 import * as THREE from "three";
 
 interface ModelViewerProps {
   src: string;
   width?: string | number;
   height?: string | number;
+  rotation?: [number, number, number];
 }
 
-function RotatingModel({ src, rotating }: { src: string; rotating: boolean }) {
+function CameraControls() {
+  const { camera, gl } = useThree();
+  const controls = useRef<OrbitControls | null>(null);
+
+  useEffect(() => {
+    controls.current = new OrbitControls(camera, gl.domElement);
+    controls.current.enableDamping = true; // Adds a smooth, fluid feeling to the mouse interaction
+    return () => controls.current?.dispose();
+  }, [camera, gl]);
+
+  useFrame(() => {
+    controls.current?.update();
+  });
+
+  return null;
+}
+
+function LoadedModel({
+  src,
+  rotation,
+}: {
+  src: string;
+  rotation?: [number, number, number];
+}) {
   const gltf = useLoader(GLTFLoader, src);
   const ref = useRef<THREE.Group>(null);
   const { camera } = useThree();
@@ -32,7 +57,7 @@ function RotatingModel({ src, rotating }: { src: string; rotating: boolean }) {
 
     // Calculate camera distance based on model size and FOV
     const maxDim = Math.max(size.x, size.y, size.z);
-    const fov = (camera.fov * Math.PI) / 180;
+    const fov = ((camera as THREE.PerspectiveCamera).fov * Math.PI) / 180;
     const cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
 
     camera.position.z = cameraZ * 1.2; // Add a bit of padding
@@ -40,34 +65,25 @@ function RotatingModel({ src, rotating }: { src: string; rotating: boolean }) {
     camera.updateProjectionMatrix();
   }, [gltf, camera]);
 
-  useFrame(() => {
-    if (rotating && ref.current) {
-      ref.current.rotation.y += 0.007;
-    }
-  });
-
-  return <primitive object={gltf.scene} ref={ref} />;
+  return <primitive object={gltf.scene} ref={ref} rotation={rotation} />;
 }
 
-export default function ModelViewer({ src, width = 600, height = 600 }: ModelViewerProps) {
-  const [rotating, setRotating] = useState(false);
-
+export default function ModelViewer({
+  src,
+  width = 600,
+  height = 600,
+  rotation,
+}: ModelViewerProps) {
   return (
     <div className="flex flex-col items-center gap-4">
       <div style={{ width, height }}>
         <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
           <ambientLight intensity={0.7} />
           <directionalLight position={[5, 5, 5]} intensity={1} />
-          <RotatingModel src={src} rotating={rotating} />
+          <CameraControls />
+          <LoadedModel src={src} rotation={rotation} />
         </Canvas>
       </div>
-
-      <button
-        onClick={() => setRotating((r) => !r)}
-        className="px-2 py-1 bg-black text-white rounded-md hover:bg-gray-800 transition"
-      >
-        {rotating ? "Stop Rotation" : "Start Rotation"}
-      </button>
     </div>
   );
 }
