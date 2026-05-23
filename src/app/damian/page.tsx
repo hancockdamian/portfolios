@@ -5,7 +5,7 @@ import ModelViewer from "@/components/ModelViewer";
 
 export default function Page() {
   return (
-    <main className="relative w-full min-h-screen overflow-x-hidden bg-gray-300 flex flex-col items-center justify-center py-16">
+    <main className="relative w-full min-h-screen overflow-x-hidden bg-white bg-[radial-gradient(#d1d5db_1.5px,transparent_1.5px)] bg-[size:24px_24px] flex flex-col items-center justify-center py-16">
       <CursorTrail
         pixelSize={6}
         baseRadius={3}
@@ -35,7 +35,9 @@ export default function Page() {
 
       {/* Horizontal Scrollable Placeholder Section */}
       <div className="w-full max-w-5xl px-8 mt-24 overflow-hidden">
-        <style dangerouslySetInnerHTML={{ __html: `
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
           @keyframes scroll {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
@@ -46,8 +48,10 @@ export default function Page() {
           .animate-scroll:hover {
             animation-play-state: paused;
           }
-        `}} />
-        
+        `,
+          }}
+        />
+
         <div className="flex animate-scroll w-max pb-12 pt-8">
           {/* Set 1 */}
           <div className="flex gap-12 pr-12">
