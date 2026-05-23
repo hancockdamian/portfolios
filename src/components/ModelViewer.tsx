@@ -11,6 +11,7 @@ interface ModelViewerProps {
   width?: string | number;
   height?: string | number;
   rotation?: [number, number, number];
+  cameraPadding?: number;
 }
 
 function CameraControls() {
@@ -33,9 +34,11 @@ function CameraControls() {
 function LoadedModel({
   src,
   rotation,
+  cameraPadding = 1.2,
 }: {
   src: string;
   rotation?: [number, number, number];
+  cameraPadding?: number;
 }) {
   const gltf = useLoader(GLTFLoader, src);
   const ref = useRef<THREE.Group>(null);
@@ -60,7 +63,7 @@ function LoadedModel({
     const fov = ((camera as THREE.PerspectiveCamera).fov * Math.PI) / 180;
     const cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
 
-    camera.position.z = cameraZ * 1.2; // Add a bit of padding
+    camera.position.z = cameraZ * cameraPadding; // Adjust padding to zoom in/out
     camera.lookAt(0, 0, 0);
     camera.updateProjectionMatrix();
   }, [gltf, camera]);
@@ -73,6 +76,7 @@ export default function ModelViewer({
   width = 600,
   height = 600,
   rotation,
+  cameraPadding = 1.2,
 }: ModelViewerProps) {
   return (
     <div className="flex flex-col items-center gap-4">
@@ -81,7 +85,11 @@ export default function ModelViewer({
           <ambientLight intensity={0.7} />
           <directionalLight position={[5, 5, 5]} intensity={1} />
           <CameraControls />
-          <LoadedModel src={src} rotation={rotation} />
+          <LoadedModel
+            src={src}
+            rotation={rotation}
+            cameraPadding={cameraPadding}
+          />
         </Canvas>
       </div>
     </div>

@@ -4,6 +4,7 @@ import CursorTrail from "@/components/cursortrail";
 import ModelViewer from "@/components/ModelViewer";
 import Image from "next/image";
 import { useState, useRef } from "react";
+import Link from "next/link";
 
 export default function Page() {
   const [progress, setProgress] = useState(0);
@@ -136,11 +137,22 @@ export default function Page() {
                   key={`set1-${item}`}
                   className="flex-shrink-0 w-64 h-40 flex items-center justify-center"
                 >
-                  <div className="w-full h-full bg-gray-300/30 backdrop-blur-md border border-gray-300/50 rounded-3xl flex items-center justify-center cursor-pointer shadow-xl hover:bg-gray-400/40 hover:scale-[1.02] transition-all">
-                    <span className="text-gray-600 font-medium">
-                      coming soon...
-                    </span>
-                  </div>
+                  {item === 1 ? (
+                    <Link
+                      href="/visualiser"
+                      className="w-full h-full bg-gray-300/30 backdrop-blur-md border border-gray-300/50 rounded-3xl flex items-center justify-center cursor-pointer shadow-xl hover:bg-gray-400/40 hover:scale-[1.02] transition-all"
+                    >
+                      <span className="text-gray-600 font-medium">
+                        visualiser
+                      </span>
+                    </Link>
+                  ) : (
+                    <div className="w-full h-full bg-gray-300/30 backdrop-blur-md border border-gray-300/50 rounded-3xl flex items-center justify-center cursor-pointer shadow-xl hover:bg-gray-400/40 hover:scale-[1.02] transition-all">
+                      <span className="text-gray-600 font-medium">
+                        coming soon...
+                      </span>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -151,11 +163,22 @@ export default function Page() {
                   key={`set2-${item}`}
                   className="flex-shrink-0 w-64 h-40 flex items-center justify-center"
                 >
-                  <div className="w-full h-full bg-gray-300/30 backdrop-blur-md border border-gray-300/50 rounded-3xl flex items-center justify-center cursor-pointer shadow-xl hover:bg-gray-400/40 hover:scale-[1.02] transition-all">
-                    <span className="text-gray-600 font-medium">
-                      coming soon...
-                    </span>
-                  </div>
+                  {item === 1 ? (
+                    <Link
+                      href="/visualiser"
+                      className="w-full h-full bg-gray-300/30 backdrop-blur-md border border-gray-300/50 rounded-3xl flex items-center justify-center cursor-pointer shadow-xl hover:bg-gray-400/40 hover:scale-[1.02] transition-all"
+                    >
+                      <span className="text-gray-600 font-medium">
+                        visualiser
+                      </span>
+                    </Link>
+                  ) : (
+                    <div className="w-full h-full bg-gray-300/30 backdrop-blur-md border border-gray-300/50 rounded-3xl flex items-center justify-center cursor-pointer shadow-xl hover:bg-gray-400/40 hover:scale-[1.02] transition-all">
+                      <span className="text-gray-600 font-medium">
+                        coming soon...
+                      </span>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
