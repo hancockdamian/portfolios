@@ -2,6 +2,7 @@
 
 import CursorTrail from "@/components/cursortrail";
 import ModelViewer from "@/components/ModelViewer";
+import Image from "next/image";
 
 export default function Page() {
   return (
@@ -19,7 +20,16 @@ export default function Page() {
       <section className="w-full min-h-screen flex flex-col items-center justify-center py-16">
         <div className="flex flex-row items-center justify-between max-w-5xl w-full px-8">
           {/* Left Text Section */}
-          <section className="flex flex-col space-y-4">
+          <section className="relative z-10 flex flex-col space-y-4">
+            {/* Pink Star Background */}
+            <Image
+              src="/pink-star.svg"
+              alt="Pink Star"
+              width={450}
+              height={450}
+              className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-contain pointer-events-none opacity-90"
+            />
+
             <p className="text-sm text-gray-800">me.com</p>
             <h1 className="text-5xl font-semibold text-black">
               Damian Hancock
