@@ -5,7 +5,6 @@ RUN apt-get update && apt-get install -y \
     curl \
     git \
     wget \
-    neofetch \
     && apt-get clean
 
 # Install Git Credential Manager for AMD64
