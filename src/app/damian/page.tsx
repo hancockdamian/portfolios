@@ -3,8 +3,18 @@
 import CursorTrail from "@/components/cursortrail";
 import ModelViewer from "@/components/ModelViewer";
 import Image from "next/image";
+import { useState } from "react";
 
 export default function Page() {
+  const [progress, setProgress] = useState(41); // Start at ~1:14
+  const totalSeconds = 178; // 2 minutes and 58 seconds
+
+  const formatTime = (secs: number) => {
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${m}:${s < 10 ? "0" : ""}${s}`;
+  };
+
   return (
     <main className="relative w-full min-h-screen overflow-x-hidden bg-white bg-[radial-gradient(#d1d5db_1.5px,transparent_1.5px)] bg-[size:24px_24px] flex flex-col">
       <CursorTrail
@@ -78,9 +88,9 @@ export default function Page() {
                   key={`set1-${item}`}
                   className="flex-shrink-0 w-64 h-40 flex items-center justify-center"
                 >
-                  <div className="w-full h-full bg-gray-400/60 border-2 border-gray-400 rounded-3xl flex items-center justify-center cursor-pointer shadow-md hover:bg-gray-400/80 transition-colors">
-                    <span className="text-gray-700 font-medium">
-                      Link {item}
+                  <div className="w-full h-full bg-gray-300/30 backdrop-blur-md border border-gray-300/50 rounded-3xl flex items-center justify-center cursor-pointer shadow-xl hover:bg-gray-400/40 hover:scale-[1.02] transition-all">
+                    <span className="text-gray-600 font-medium">
+                      coming soon...
                     </span>
                   </div>
                 </div>
@@ -93,9 +103,9 @@ export default function Page() {
                   key={`set2-${item}`}
                   className="flex-shrink-0 w-64 h-40 flex items-center justify-center"
                 >
-                  <div className="w-full h-full bg-gray-400/60 border-2 border-gray-400 rounded-3xl flex items-center justify-center cursor-pointer shadow-md hover:bg-gray-400/80 transition-colors">
-                    <span className="text-gray-700 font-medium">
-                      Link {item}
+                  <div className="w-full h-full bg-gray-300/30 backdrop-blur-md border border-gray-300/50 rounded-3xl flex items-center justify-center cursor-pointer shadow-xl hover:bg-gray-400/40 hover:scale-[1.02] transition-all">
+                    <span className="text-gray-600 font-medium">
+                      coming soon...
                     </span>
                   </div>
                 </div>
@@ -106,8 +116,121 @@ export default function Page() {
       </section>
 
       {/* --- Section 2: Future Content --- */}
-      <section className="w-full min-h-screen flex flex-col items-center justify-center">
-        {/* Empty for now, but ready for your next section */}
+      <section className="w-full flex flex-col items-center justify-center pt-4 pb-24">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-16 max-w-5xl w-full px-8 z-10">
+          {/* Left Column: Record & Liquid Glass Player */}
+          <div className="flex-1 flex flex-col items-center w-full max-w-md gap-6 relative">
+            {/* Title Section */}
+            <div className="flex flex-col items-center text-center gap-1">
+              <p className="text-gray-500 text-m">favourite album</p>
+              <h3 className="text-gray-600 text-xl font-medium">feeble little horse - girl with fish</h3>
+            </div>
+
+            {/* Record Image */}
+            <Image
+              src="/record.svg"
+              alt="Record"
+              width={320}
+              height={320}
+              className="object-contain drop-shadow-xl"
+            />
+
+            <h3 className="text-gray-500 text-l font-medium"></h3>
+
+            {/* Subtle liquid color glow behind the standalone glass elements */}
+            <div className="absolute bottom-10 left-10 w-32 h-32 bg-pink-300/30 rounded-full mix-blend-multiply filter blur-2xl animate-pulse -z-10"></div>
+            <div className="absolute bottom-0 right-10 w-32 h-32 bg-blue-300/30 rounded-full mix-blend-multiply filter blur-2xl animate-pulse delay-700 -z-10"></div>
+
+            {/* Standalone Glass Progress Bar */}
+            <div className="w-full flex flex-col gap-2 mt-2 z-10 px-4">
+              <div className="relative w-full bg-gray-300/30 backdrop-blur-md rounded-full h-2 shadow-xl">
+                {/* Transparent Glass Fill */}
+                <div
+                  className="absolute top-0 left-0 h-full bg-gray-400/40 rounded-full shadow-[0_0_8px_rgba(156,163,175,0.5)] pointer-events-none"
+                  style={{ width: `${progress}%` }}
+                ></div>
+                {/* Interactive Hidden Slider */}
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="0.1"
+                  value={progress}
+                  onChange={(e) => setProgress(Number(e.target.value))}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                />
+              </div>
+              <div className="flex justify-between text-xs text-gray-300 opacity-100 font-medium px-1">
+                <span>
+                  {formatTime(Math.floor((progress / 100) * totalSeconds))}
+                </span>
+                <span>2:58</span>
+              </div>
+            </div>
+
+            {/* Standalone Glass Controls */}
+            <div className="flex items-center justify-center gap-8 z-10 mt-2">
+              <button className="flex items-center justify-center hover:scale-110 transition-transform cursor-pointer group drop-shadow-xl">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  className="w-8 h-8 fill-gray-300/70 group-hover:fill-gray-400/90 transition-colors"
+                >
+                  <path d="M7 6c.55 0 1 .45 1 1v10c0 .55-.45 1-1 1s-1-.45-1-1V7c0-.55.45-1 1-1zm3.66 6.82l5.77 4.07c.66.47 1.58-.01 1.58-.82V7.93c0-.81-.91-1.28-1.58-.82l-5.77 4.07c-.57.4-.57 1.24 0 1.64z" />
+                </svg>
+              </button>
+              <button className="flex items-center justify-center hover:scale-110 transition-transform cursor-pointer group drop-shadow-2xl">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  className="w-12 h-12 fill-gray-300/70 group-hover:fill-gray-400/90 transition-colors ml-1"
+                >
+                  <path d="M8 6.82v10.36c0 .79.87 1.27 1.54.84l8.14-5.18c.62-.39.62-1.29 0-1.69L9.54 5.98C8.87 5.55 8 6.03 8 6.82z" />
+                </svg>
+              </button>
+              <button className="flex items-center justify-center hover:scale-110 transition-transform cursor-pointer group drop-shadow-xl">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  className="w-8 h-8 fill-gray-300/70 group-hover:fill-gray-400/90 transition-colors"
+                >
+                  <path d="M7.58 16.89l5.77-4.07c.56-.4.56-1.24 0-1.63L7.58 7.11C6.91 6.65 6 7.12 6 7.93v8.14c0 .81.91 1.28 1.58.82zM16 7v10c0 .55.45 1 1 1s1-.45 1-1V7c0-.55-.45-1-1-1s-1 .45-1 1z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          {/* Right Column: Text */}
+          <div className="relative z-10 flex-1 flex flex-col gap-6 text-lg text-gray-800 leading-relaxed font-medium">
+            {/* Yellow Swirl Background */}
+            <div className="absolute -z-10 -inset-x-8 -inset-y-8 md:-inset-12 pointer-events-none opacity-80">
+              <Image
+                src="/yellow-swirl.svg"
+                alt="Yellow Swirl"
+                fill
+                className="object-fill"
+              />
+            </div>
+
+            <p>
+              feeble little horse&apos;s{" "}
+              <em className="text-black font-semibold">girl with fish</em> feels
+              like sprinting through a sun-soaked field with a thunderstorm on
+              your heels.
+            </p>
+            <p>
+              every track swings between bliss and chaos — layers of fuzz
+              collapse into delicate whispers, melodies bloom inside the
+              distortion like flowers pushing through concrete.
+            </p>
+            <p>
+              it&apos;s jagged and tender, noisy and heartbreakingly pretty. the
+              crescendos don&apos;t just build, they swell like waves, pulling
+              you under and spitting you out dizzy, grinning, soaked in feedback
+              and feeling.
+            </p>
+          </div>
+        </div>
       </section>
     </main>
   );
